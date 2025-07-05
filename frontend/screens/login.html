@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login - AutoDoc Paraná</title>
+  <style>
+    /* CSS completo inline */
+    body {
+      background: linear-gradient(135deg, #e0eafc 0%, #cfdef3 100%);
+      font-family: 'Segoe UI', Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+    }
+
+    header {
+      background: #2e86de;
+      color: #fff;
+      padding: 2rem 0 1rem 0;
+      text-align: center;
+      position: relative;
+    }
+
+    header h1 {
+      font-size: 3rem;
+      letter-spacing: 2px;
+      margin: 0 0 0.5rem 0;
+    }
+
+    header p {
+      font-size: 1.2rem;
+      margin: 0;
+      opacity: 0.9;
+    }
+
+    main {
+      max-width: 600px;
+      margin: 2rem auto;
+      background: #fff;
+      border-radius: 2rem 0 2rem 0;
+      box-shadow: 0 8px 32px rgba(44, 62, 80, 0.15);
+      padding: 2rem;
+      position: relative;
+    }
+
+    .auth-container {
+      max-width: 500px;
+      margin: 0 auto;
+    }
+
+    .auth-tabs {
+      display: flex;
+      margin-bottom: 2rem;
+      border-radius: 1rem;
+      overflow: hidden;
+      box-shadow: 0 2px 8px rgba(44, 62, 80, 0.1);
+    }
+
+    .tab-btn {
+      flex: 1;
+      padding: 1rem;
+      border: none;
+      background: #f4f6fb;
+      color: #2e86de;
+      font-size: 1.1rem;
+      font-weight: bold;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+
+    .tab-btn.active {
+      background: #2e86de;
+      color: #fff;
+    }
+
+    .auth-form h2 {
+      text-align: center;
+      color: #2e86de;
+      margin-bottom: 2rem;
+      font-size: 2rem;
+    }
+
+    .auth-form label {
+      display: block;
+      font-size: 1.2rem;
+      margin-top: 1.5rem;
+      color: #2e86de;
+      font-weight: bold;
+    }
+
+    .auth-form input {
+      width: 100%;
+      padding: 0.8rem;
+      margin-top: 0.5rem;
+      border: 2px solid #2e86de;
+      border-radius: 1rem;
+      font-size: 1.1rem;
+      background: #f4f6fb;
+      color: #222;
+      box-sizing: border-box;
+    }
+
+    .auth-form button {
+      margin-top: 2rem;
+      background: linear-gradient(90deg, #2e86de 60%, #f9ca24 100%);
+      color: #fff;
+      font-size: 1.3rem;
+      font-weight: bold;
+      border: none;
+      border-radius: 1rem;
+      padding: 1rem 2.5rem;
+      cursor: pointer;
+      box-shadow: 0 4px 16px rgba(44, 62, 80, 0.10);
+      transition: background 0.2s;
+      width: 100%;
+    }
+
+    .auth-form button:hover {
+      background: linear-gradient(90deg, #f9ca24 60%, #2e86de 100%);
+    }
+
+    @media (max-width: 700px) {
+      main {
+        padding: 1rem;
+        border-radius: 1rem 0 1rem 0;
+        margin: 1rem;
+      }
+      header h1 {
+        font-size: 2rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>AutoDoc Paraná</h1>
+    <p>Sistema de Receitas Médicas Online</p>
+  </header>
+  <main>
+    <div class="auth-container">
+      <div class="auth-tabs">
+        <button class="tab-btn active" onclick="showTab('login')">Login</button>
+        <button class="tab-btn" onclick="showTab('register')">Registro</button>
+      </div>
+      
+      <div id="login-tab" class="auth-form">
+        <h2>Faça seu Login</h2>
+        <form id="login-form">
+          <label for="login-cpf">CPF:</label>
+          <input type="text" id="login-cpf" name="cpf" maxlength="14" required placeholder="000.000.000-00">
+          
+          <label for="login-senha">Senha:</label>
+          <input type="password" id="login-senha" name="senha" required>
+          
+          <button type="submit">Entrar</button>
+        </form>
+      </div>
+      
+      <div id="register-tab" class="auth-form" style="display: none;">
+        <h2>Crie sua Conta</h2>
+        <form id="register-form">
+          <label for="register-nome">Nome Completo:</label>
+          <input type="text" id="register-nome" name="nome" required>
+          
+          <label for="register-cpf">CPF:</label>
+          <input type="text" id="register-cpf" name="cpf" maxlength="14" required placeholder="000.000.000-00">
+          
+          <label for="register-email">E-mail:</label>
+          <input type="email" id="register-email" name="email" required>
+          
+          <label for="register-senha">Senha:</label>
+          <input type="password" id="register-senha" name="senha" required>
+          
+          <label for="register-confirmar-senha">Confirmar Senha:</label>
+          <input type="password" id="register-confirmar-senha" name="confirmar-senha" required>
+          
+          <button type="submit">Criar Conta</button>
+        </form>
+      </div>
+    </div>
+  </main>
+
+  <script>
+    // Sistema de autenticação simplificado
+    class AuthSystem {
+      constructor() {
+        this.users = JSON.parse(localStorage.getItem('users')) || {};
+        this.currentUser = JSON.parse(localStorage.getItem('currentUser')) || null;
+      }
+
+      register(userData) {
+        const { nome, cpf, email, senha } = userData;
+        
+        if (!nome || !cpf || !email || !senha) {
+          throw new Error('Todos os campos são obrigatórios');
+        }
+        
+        if (!this.validarCPF(cpf)) {
+          throw new Error('CPF inválido');
+        }
+        
+        if (!this.validarEmail(email)) {
+          throw new Error('E-mail inválido');
+        }
+        
+        if (senha.length < 6) {
+          throw new Error('Senha deve ter pelo menos 6 caracteres');
+        }
+        
+        if (this.users[cpf]) {
+          throw new Error('CPF já cadastrado');
+        }
+        
+        const user = {
+          nome,
+          cpf,
+          email,
+          senha: btoa(senha),
+          dataCadastro: new Date().toISOString(),
+          receitas: []
+        };
+        
+        this.users[cpf] = user;
+        localStorage.setItem('users', JSON.stringify(this.users));
+        
+        return user;
+      }
+
+      login(cpf, senha) {
+        const user = this.users[cpf];
+        
+        if (!user) {
+          throw new Error('CPF não encontrado');
+        }
+        
+        if (user.senha !== btoa(senha)) {
+          throw new Error('Senha incorreta');
+        }
+        
+        this.currentUser = user;
+        localStorage.setItem('currentUser', JSON.stringify(user));
+        
+        return user;
+      }
+
+      validarCPF(cpf) {
+        return /^\d{3}\.\d{3}\.\d{3}-\d{2}$/.test(cpf);
+      }
+
+      validarEmail(email) {
+        return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+      }
+    }
+
+    const auth = new AuthSystem();
+
+    // Função para trocar abas
+    function showTab(tabName) {
+      document.querySelectorAll('.auth-form').forEach(form => {
+        form.style.display = 'none';
+      });
+      
+      document.querySelectorAll('.tab-btn').forEach(btn => {
+        btn.classList.remove('active');
+      });
+      
+      document.getElementById(tabName + '-tab').style.display = 'block';
+      event.target.classList.add('active');
+    }
+
+    // Configurar formulários quando a página carregar
+    document.addEventListener('DOMContentLoaded', () => {
+      const loginForm = document.getElementById('login-form');
+      const registerForm = document.getElementById('register-form');
+      
+      if (loginForm) {
+        loginForm.addEventListener('submit', (e) => {
+          e.preventDefault();
+          
+          const cpf = document.getElementById('login-cpf').value;
+          const senha = document.getElementById('login-senha').value;
+          
+          try {
+            const user = auth.login(cpf, senha);
+            alert('Login realizado com sucesso!');
+            window.location.href = 'home.html';
+          } catch (error) {
+            alert(error.message);
+          }
+        });
+      }
+      
+      if (registerForm) {
+        registerForm.addEventListener('submit', (e) => {
+          e.preventDefault();
+          
+          const nome = document.getElementById('register-nome').value;
+          const cpf = document.getElementById('register-cpf').value;
+          const email = document.getElementById('register-email').value;
+          const senha = document.getElementById('register-senha').value;
+          const confirmarSenha = document.getElementById('register-confirmar-senha').value;
+          
+          if (senha !== confirmarSenha) {
+            alert('As senhas não coincidem');
+            return;
+          }
+          
+          try {
+            const user = auth.register({ nome, cpf, email, senha });
+            alert('Conta criada com sucesso! Faça login para continuar.');
+            
+            registerForm.reset();
+            showTab('login');
+          } catch (error) {
+            alert(error.message);
+          }
+        });
+      }
+    });
+  </script>
+</body>
+</html> 

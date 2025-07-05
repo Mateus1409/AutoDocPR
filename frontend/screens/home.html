@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Home - AutoDoc Paraná</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header>
+    <h1>AutoDoc Paraná</h1>
+    <nav>
+      <a href="home.html" class="active">Home</a> |
+      <a href="conta.html">Minha Conta</a> |
+      <a href="about.html">Sobre</a> |
+      <a href="pharmacies.html">Farmácias Parceiras</a> |
+      <a href="#" onclick="logout()">Sair</a>
+    </nav>
+  </header>
+  <main>
+    <section class="welcome-section">
+      <h2>Bem-vindo ao AutoDoc Paraná</h2>
+      <p>Olá, <span id="user-name">Usuário</span>! Aqui você pode gerar receitas médicas online de forma segura e prática.</p>
+    </section>
+    
+    <section class="quick-actions">
+      <h3>Ações Rápidas</h3>
+      <div class="action-cards">
+        <div class="action-card">
+          <h4>Gerar Nova Receita</h4>
+          <p>Descreva seus sintomas e gere uma receita médica</p>
+          <button onclick="window.location.href='index.html'">Começar</button>
+        </div>
+        <div class="action-card">
+          <h4>Minhas Receitas</h4>
+          <p>Visualize seu histórico de receitas geradas</p>
+          <button onclick="window.location.href='conta.html'">Ver Histórico</button>
+        </div>
+        <div class="action-card">
+          <h4>Farmácias Parceiras</h4>
+          <p>Encontre farmácias parceiras próximas</p>
+          <button onclick="window.location.href='pharmacies.html'">Buscar</button>
+        </div>
+      </div>
+    </section>
+    
+    <section class="stats-section">
+      <h3>Estatísticas da Sua Conta</h3>
+      <div class="stats-grid">
+        <div class="stat-item">
+          <span class="stat-number" id="total-receitas">0</span>
+          <span class="stat-label">Receitas Geradas</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number" id="receitas-restantes">3</span>
+          <span class="stat-label">Receitas Restantes</span>
+        </div>
+      </div>
+    </section>
+  </main>
+  <script src="auth.js"></script>
+  <script src="home.js"></script>
+</body>
+</html> 

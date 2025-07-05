@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Teste Login - AutoDoc Paraná</title>
+  <style>
+    body {
+      background: linear-gradient(135deg, #e0eafc 0%, #cfdef3 100%);
+      font-family: 'Segoe UI', Arial, sans-serif;
+      margin: 0;
+      padding: 2rem;
+      min-height: 100vh;
+    }
+    .test-container {
+      max-width: 600px;
+      margin: 0 auto;
+      background: #fff;
+      padding: 2rem;
+      border-radius: 1rem;
+      box-shadow: 0 8px 32px rgba(44, 62, 80, 0.15);
+    }
+    button {
+      background: #2e86de;
+      color: #fff;
+      border: none;
+      padding: 1rem 2rem;
+      border-radius: 0.5rem;
+      cursor: pointer;
+      margin: 0.5rem;
+    }
+    input {
+      padding: 0.5rem;
+      margin: 0.5rem;
+      border: 1px solid #ddd;
+      border-radius: 0.3rem;
+    }
+  </style>
+</head>
+<body>
+  <div class="test-container">
+    <h1>Teste do Sistema de Login</h1>
+    
+    <h2>1. Teste de localStorage</h2>
+    <button onclick="testLocalStorage()">Testar localStorage</button>
+    <div id="localStorage-result"></div>
+    
+    <h2>2. Teste de Registro</h2>
+    <input type="text" id="test-nome" placeholder="Nome" value="João Silva">
+    <input type="text" id="test-cpf" placeholder="CPF" value="123.456.789-00">
+    <input type="email" id="test-email" placeholder="Email" value="joao@teste.com">
+    <input type="password" id="test-senha" placeholder="Senha" value="123456">
+    <br>
+    <button onclick="testRegister()">Testar Registro</button>
+    <div id="register-result"></div>
+    
+    <h2>3. Teste de Login</h2>
+    <input type="text" id="test-login-cpf" placeholder="CPF" value="123.456.789-00">
+    <input type="password" id="test-login-senha" placeholder="Senha" value="123456">
+    <br>
+    <button onclick="testLogin()">Testar Login</button>
+    <div id="login-result"></div>
+    
+    <h2>4. Teste de Validação</h2>
+    <button onclick="testValidation()">Testar Validações</button>
+    <div id="validation-result"></div>
+    
+    <h2>5. Navegação</h2>
+    <button onclick="window.location.href='login.html'">Ir para Login Real</button>
+    <button onclick="window.location.href='test.html'">Ir para Teste Geral</button>
+  </div>
+
+  <script>
+    // Sistema de teste
+    class TestAuthSystem {
+      constructor() {
+        this.users = JSON.parse(localStorage.getItem('users')) || {};
+        this.currentUser = JSON.parse(localStorage.getItem('currentUser')) || null;
+      }
+
+      register(userData) {
+        const { nome, cpf, email, senha } = userData;
+        
+        if (!nome || !cpf || !email || !senha) {
+          throw new Error('Todos os campos são obrigatórios');
+        }
+        
+        if (!this.validarCPF(cpf)) {
+          throw new Error('CPF inválido');
+        }
+        
+        if (!this.validarEmail(email)) {
+          throw new Error('E-mail inválido');
+        }
+        
+        if (senha.length < 6) {
+          throw new Error('Senha deve ter pelo menos 6 caracteres');
+        }
+        
+        if (this.users[cpf]) {
+          throw new Error('CPF já cadastrado');
+        }
+        
+        const user = {
+          nome,
+          cpf,
+          email,
+          senha: btoa(senha),
+          dataCadastro: new Date().toISOString(),
+          receitas: []
+        };
+        
+        this.users[cpf] = user;
+        localStorage.setItem('users', JSON.stringify(this.users));
+        
+        return user;
+      }
+
+      login(cpf, senha) {
+        const user = this.users[cpf];
+        
+        if (!user) {
+          throw new Error('CPF não encontrado');
+        }
+        
+        if (user.senha !== btoa(senha)) {
+          throw new Error('Senha incorreta');
+        }
+        
+        this.currentUser = user;
+        localStorage.setItem('currentUser', JSON.stringify(user));
+        
+        return user;
+      }
+
+      validarCPF(cpf) {
+        return /^\d{3}\.\d{3}\.\d{3}-\d{2}$/.test(cpf);
+      }
+
+      validarEmail(email) {
+        return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+      }
+    }
+
+    const testAuth = new TestAuthSystem();
+
+    function testLocalStorage() {
+      try {
+        localStorage.setItem('test', 'funcionando');
+        const result = localStorage.getItem('test');
+        document.getElementById('localStorage-result').innerHTML = 
+          `<p style="color: green;">✅ localStorage funcionando: ${result}</p>`;
+      } catch (error) {
+        document.getElementById('localStorage-result').innerHTML = 
+          `<p style="color: red;">❌ localStorage não funcionando: ${error.message}</p>`;
+      }
+    }
+
+    function testRegister() {
+      try {
+        const nome = document.getElementById('test-nome').value;
+        const cpf = document.getElementById('test-cpf').value;
+        const email = document.getElementById('test-email').value;
+        const senha = document.getElementById('test-senha').value;
+        
+        const user = testAuth.register({ nome, cpf, email, senha });
+        document.getElementById('register-result').innerHTML = 
+          `<p style="color: green;">✅ Registro funcionando: ${user.nome} cadastrado</p>`;
+      } catch (error) {
+        document.getElementById('register-result').innerHTML = 
+          `<p style="color: red;">❌ Erro no registro: ${error.message}</p>`;
+      }
+    }
+
+    function testLogin() {
+      try {
+        const cpf = document.getElementById('test-login-cpf').value;
+        const senha = document.getElementById('test-login-senha').value;
+        
+        const user = testAuth.login(cpf, senha);
+        document.getElementById('login-result').innerHTML = 
+          `<p style="color: green;">✅ Login funcionando: ${user.nome} logado</p>`;
+      } catch (error) {
+        document.getElementById('login-result').innerHTML = 
+          `<p style="color: red;">❌ Erro no login: ${error.message}</p>`;
+      }
+    }
+
+    function testValidation() {
+      const results = [];
+      
+      // Teste CPF
+      if (testAuth.validarCPF('123.456.789-00')) {
+        results.push('✅ CPF válido');
+      } else {
+        results.push('❌ CPF inválido');
+      }
+      
+      // Teste Email
+      if (testAuth.validarEmail('teste@email.com')) {
+        results.push('✅ Email válido');
+      } else {
+        results.push('❌ Email inválido');
+      }
+      
+      document.getElementById('validation-result').innerHTML = 
+        `<p>${results.join('<br>')}</p>`;
+    }
+  </script>
+</body>
+</html> 

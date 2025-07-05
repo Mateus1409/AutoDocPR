@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AutoDoc Paraná</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header>
+    <h1>AutoDoc Paraná</h1>
+    <nav>
+      <a href="home.html">Home</a> |
+      <a href="conta.html">Minha Conta</a> |
+      <a href="about.html">Sobre</a> |
+      <a href="pharmacies.html">Farmácias Parceiras</a> |
+      <a href="#" onclick="logout()">Sair</a>
+    </nav>
+  </header>
+  <main>
+    <h2>Gerar Nova Receita</h2>
+    <form id="form-receita">
+      <label for="sintomas">Descreva seus sintomas:</label>
+      <textarea id="sintomas" name="sintomas" rows="4" required></textarea>
+      <div id="captcha-container"></div>
+      <button type="submit">Gerar Receita</button>
+    </form>
+    <section id="receita-gerada" style="display:none;">
+      <h2>Sua Receita Médica</h2>
+      <pre id="receita-texto"></pre>
+    </section>
+  </main>
+  <script src="auth.js"></script>
+  <script src="script.js"></script>
+</body>
+</html> 

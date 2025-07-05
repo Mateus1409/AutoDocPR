@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Minha Conta - AutoDoc Paraná</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header>
+    <h1>AutoDoc Paraná</h1>
+    <nav>
+      <a href="home.html">Home</a> |
+      <a href="conta.html" class="active">Minha Conta</a> |
+      <a href="about.html">Sobre</a> |
+      <a href="pharmacies.html">Farmácias Parceiras</a> |
+      <a href="#" onclick="logout()">Sair</a>
+    </nav>
+  </header>
+  <main>
+    <section class="profile-section">
+      <h2>Informações da Conta</h2>
+      <div class="profile-info">
+        <div class="info-group">
+          <label>Nome:</label>
+          <span id="profile-nome">Carregando...</span>
+        </div>
+        <div class="info-group">
+          <label>CPF:</label>
+          <span id="profile-cpf">Carregando...</span>
+        </div>
+        <div class="info-group">
+          <label>E-mail:</label>
+          <span id="profile-email">Carregando...</span>
+        </div>
+        <div class="info-group">
+          <label>Data de Cadastro:</label>
+          <span id="profile-data">Carregando...</span>
+        </div>
+      </div>
+    </section>
+    
+    <section class="receitas-section">
+      <h2>Histórico de Receitas</h2>
+      <div class="receitas-stats">
+        <div class="stat-card">
+          <h3>Total de Receitas</h3>
+          <span id="total-receitas-historico">0</span>
+        </div>
+        <div class="stat-card">
+          <h3>Receitas Restantes</h3>
+          <span id="receitas-restantes-historico">3</span>
+        </div>
+      </div>
+      
+      <div class="receitas-list" id="receitas-list">
+        <p>Nenhuma receita gerada ainda.</p>
+      </div>
+    </section>
+    
+    <section class="settings-section">
+      <h2>Configurações</h2>
+      <div class="settings-options">
+        <button onclick="alterarSenha()">Alterar Senha</button>
+        <button onclick="exportarDados()">Exportar Meus Dados</button>
+        <button onclick="excluirConta()" class="danger">Excluir Conta</button>
+      </div>
+    </section>
+  </main>
+  <script src="auth.js"></script>
+  <script src="conta.js"></script>
+</body>
+</html> 
